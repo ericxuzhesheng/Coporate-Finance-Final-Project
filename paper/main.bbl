@@ -1,0 +1,32 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ball and Brown(1968)]{ball1968}
+Ray Ball and Philip Brown.
+\newblock An empirical evaluation of accounting income numbers.
+\newblock \emph{Journal of Accounting Research}, 6\penalty0 (2):\penalty0
+  159--178, 1968.
+
+\bibitem[Bernard and Thomas(1989)]{bernard1989}
+Victor~L. Bernard and Jacob~K. Thomas.
+\newblock Post-earnings-announcement drift: Delayed price response or risk
+  premium?
+\newblock \emph{Journal of Accounting Research}, 27:\penalty0 1--36, 1989.
+
+\bibitem[Black and Scholes(1973)]{black1973}
+Fischer Black and Myron Scholes.
+\newblock The pricing of options and corporate liabilities.
+\newblock \emph{Journal of Political Economy}, 81\penalty0 (3):\penalty0
+  637--654, 1973.
+
+\bibitem[{Guosen Securities Economic Research Institute}(2020)]{guosen2020}
+{Guosen Securities Economic Research Institute}.
+\newblock 金融工程专题研究：超预期投资全攻略 [special report
+  on financial engineering: A complete guide to earnings-surprise investing].
+\newblock Technical report, Guosen Securities, Sep 2020.
+
+\end{thebibliography}

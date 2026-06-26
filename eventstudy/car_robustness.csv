@@ -1,0 +1,5 @@
+event,react_mean,drift_mean,react_peer,drift_peer
+GLM-5,20.4,15.4,17.2,13.3
+GLM-5-Turbo,10.3,-7.7,14.6,19.2
+GLM-5.1,11.9,-22.8,13.4,12.9
+GLM-5.2,27.4,32.4,28.7,37.7

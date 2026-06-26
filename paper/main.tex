@@ -1,0 +1,376 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{xeCJK}
+\setCJKmainfont{SimSun}
+\usepackage[hidelinks]{hyperref}
+\graphicspath{{../figures/}}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+\title{\textbf{Capability Surprise, Not Earnings Surprise:\\
+Valuing and Pricing a Pre-Revenue Frontier-AI Lab\\
+\large Zhipu AI / Knowledge Atlas Technology (2513.HK)}}
+\author{Zhesheng Xu (许哲圣) \\ Student ID: 42353012 \\ \small Corporate Finance --- Final Project}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent In January 2026 Zhipu AI (Knowledge Atlas Technology, 2513.HK) became the first
+foundation-model laboratory to list publicly anywhere, debuting on the Hong Kong main board under the
+Chapter~18C regime for pre-revenue specialist-technology firms. Within five months its shares rose
+roughly nineteen-fold, lifting market capitalisation to about US\$124~billion on expected 2026 revenue of
+only US\$200~million---an implied price-to-sales multiple near 620$\times$. This paper asks what such a
+company is worth and how its price is formed. We proceed on two tracks. First, we build a fundamental
+anchor: a CAPM cost of capital, a three-scenario discounted-cash-flow (DCF) model, an EV/Sales comparison
+with peer MiniMax and global laboratories, and a real-options reading. Even generous assumptions---revenue
+compounding 21--43\% annually for a decade---yield an intrinsic value of only HK\$29--84 per share against a
+market price near HK\$2,228; a reverse DCF shows the price embeds roughly 90\% annual revenue growth and
+US\$64~billion of revenue by 2035, hyperscaler-tier expectations. Second, because a pre-revenue lab has no
+earnings to surprise, we replace the classic earnings-surprise event study with a \emph{capability-surprise}
+one: treating model releases and benchmark-leaderboard jumps (GLM-5 through GLM-5.2) as information events
+and measuring cumulative abnormal returns. The market reacts immediately and discriminately---separating
+Zhipu from MiniMax on model quality rather than sector---but mis-times magnitude, under-reacting to genuine
+state-of-the-art leaps and over-reacting to incremental ones, evidence of post-capability-announcement drift
+that is robust to peer adjustment. We conclude that the valuation gap is best read not as a simple bubble but
+as a market pricing a winner-take-all option on frontier AI, whose path is driven by capability momentum.
+
+\vspace{0.6em}
+\noindent\textbf{Keywords:} foundation models; Chapter 18C; pre-revenue valuation; real options; market
+efficiency; event study; PEAD/PCAD.
+\end{abstract}
+
+\section{Introduction}
+The first half of 2026 produced an event with no precedent in capital-market history: within forty-eight
+hours, two Chinese ``AI tiger'' laboratories---Zhipu AI (2513.HK, 8~January) and MiniMax (00100.HK,
+9~January)---listed on the Hong Kong Stock Exchange, the first foundation-model developers to go public
+anywhere.\footnote{CNBC, ``The first of China's AI tigers goes public'' (2026-01-08); ``MiniMax doubles in
+Hong Kong debut'' (2026-01-09).} Zhipu listed under Chapter~18C, a regime designed to admit pre-revenue
+specialist-technology firms. What followed was extraordinary even by the standards of growth investing:
+Zhipu's shares rose roughly nineteen-fold in five months to a market capitalisation near
+US\$124~billion,\footnote{Price and market-capitalisation data: stockanalysis.com (HKG:2513), retrieved
+2026-06-26; daily series from Tushare \texttt{hk\_daily}.} on FY2026 expected revenue of about
+US\$200~million.
+
+This paper poses three questions. \textbf{(i)} What is Zhipu worth on fundamentals? \textbf{(ii)} What does
+the nineteen-fold re-rating imply---efficient pricing of capability, exuberance, or option value?
+\textbf{(iii)} Is the open-weight, cost-disruption strategy that drives its leaderboard dominance
+financially sustainable? Our contribution is methodological as much as empirical. Because a pre-revenue lab
+has no earnings, the standard apparatus of market-efficiency testing---the earnings-surprise event study
+\citep{ball1968,bernard1989}---has nothing to bite on. We therefore reframe the information event as a
+\emph{capability surprise}: a model release or a benchmark-leaderboard jump. This adapts the
+``earnings-surprise'' (\emph{chao yuqi}) toolkit of \citet{guosen2020} to a new asset class, reusing its
+cumulative-abnormal-return (CAR) windows and a deliberately diagnostic, small-sample-honest posture.
+
+\section{Company and Business Model}
+Zhipu AI was founded in 2019 out of Tsinghua University's Knowledge Engineering Group and renamed Knowledge
+Atlas Technology ahead of listing. It develops the GLM (``General Language Model'') family and monetises
+through three channels: usage-based API access, enterprise subscriptions, and private/on-premise model
+deployment plus fine-tuning. Its distinctive strategic choice is an \emph{open-weight funnel}: flagship
+models (GLM-4.6, GLM-5.x) are released with open weights and aggressive token pricing, converting developer
+mindshare into a usage and data flywheel routed through the Z.ai and Z.code developer platforms. Roughly
+70\% of IPO proceeds are earmarked for model R\&D over 2026--2028.\footnote{Caixin Global, ``Zhipu AI Seeks
+Up to \$640 Million in Hong Kong IPO'' (2025-12-30).}
+
+\section{Financial Performance}
+\label{sec:fin}
+Zhipu's reported financials are those of an early-stage laboratory, not a mature firm, and three features
+dominate (Section~\ref{sec:statements} gives the full statements). \textbf{(1) Explosive but tiny revenue:}
+revenue rose from RMB~312.4m (2024) to RMB~724.3m (2025, +132\%), roughly US\$44m then US\$102m. \textbf{(2)
+A collapsing gross margin:} gross margin fell from 76.1\% (2022)---a classic software profile---to 3.4\%
+(2024) and to $-0.4\%$ in H1~2025, as the firm bought market share through compute-heavy, under-priced API
+and training workloads. \textbf{(3) Deepening losses and negative equity:} the net loss widened to about
+RMB~4.70bn in 2025 (+237\%); at 30~June~2025 the group reported net liabilities of RMB~6.15bn and net
+current liabilities of RMB~9.56bn against cash of only RMB~190.9m.\footnote{Prospectus and interim figures:
+HKEXnews filing for stock code 2513 (2025-12-30); summary via Tiger Brokers and Simply Wall St.} Conventional
+ratio analysis is therefore of limited use: with negative margins and negative book equity, the informative
+metrics are revenue growth, the gross-margin trajectory, cash burn, and post-IPO runway. We take FY2026
+revenue of US\$200m as the launch point for the valuation in Section~\ref{sec:val}.
+
+\section{Market Reaction and Capital-Market Strategy}
+\label{sec:market}
+Zhipu priced its IPO at HK\$116.20, raising about HK\$4.3bn with HK\$3bn of cornerstone commitments, at an
+implied valuation near US\$6.7--7.4bn.\footnote{Baker McKenzie, ``Advises Knowledge Atlas Technology on its
+HKD~4.3~Billion Global Offering'' (2026-01); Caixin Global (2026-01-08).} Three features make the listing
+strategically remarkable. First, \textbf{regulatory access}: Chapter~18C let a loss-making lab tap permanent
+public capital years before profitability, ending dependence on private rounds. Second, \textbf{certification}:
+being the world's first listed foundation-model company conferred a signalling premium. Third, \textbf{the
+re-rating}: the stock compounded to roughly HK\$2,228 by late June 2026 (Figure~\ref{fig:price}), about
++1,920\% versus IPO, with realised annualised volatility near 192\%. MiniMax, listing one day later at
+HK\$165, doubled on debut, then \emph{de-rated} by roughly 60\% from its peak---a divergence we exploit in
+Section~\ref{sec:event}.
+
+\section{Industry and Competitive Landscape}
+\label{sec:industry}
+A Porter's five-forces reading of foundation models is unusual: supplier power (advanced compute) is high and
+partly politically rationed; buyer switching costs are low because open weights commoditise the layer; and
+the credible substitutes are other open-weight frontier models. In this structure Zhipu's leaderboard
+strategy is the competitive core. Its GLM-5 line---built on a mixture-of-experts architecture (GLM-4.6:
+$\approx$355B parameters, 32B active, 200K context)---topped coding benchmarks: GLM-5.1 ranked \#1 on
+SWE-Bench Pro at 58.4\%, within 2.6 points of the leading closed model, and GLM-5.2 (June~2026) shipped with
+MIT open weights and a one-million-token context at unchanged pricing.\footnote{Model specs/benchmarks:
+howaiworks.ai (GLM-4.6), serenitiesai.com (GLM-5.1), eigent.ai (GLM-5.2).} The strategic logic is
+\emph{cost disruption}---give away capability at the frontier and price tokens below closed competitors---and
+it is now paired with emerging \emph{pricing power}: each GLM-5.x release was accompanied by API price
+increases of 8--17\%.\footnote{Investing.com, ``Zhipu shares jump on second AI price hike this year''
+(2026-04-08).} This release cadence defines the event taxonomy for Section~\ref{sec:event}.
+
+\section{Macroeconomic and Policy Environment}
+Three macro forces dominate. \textbf{Industrial policy}: Chinese AI is a national priority, supporting demand
+through state and SOE procurement. \textbf{Compute export controls}: U.S. restrictions on advanced chips
+force architectural efficiency (MoE, aggressive quantisation), an ``efficiency-by-necessity'' that doubles as
+a cost advantage. \textbf{Capital-market structure}: Hong Kong's Chapter~18C, Hang Seng Tech Index inclusion,
+and Southbound Stock Connect eligibility jointly determine the marginal buyer---Zhipu joined the Hang Seng
+Tech Index on 5~June and Stock Connect on 8~June~2026, drawing about HK\$920m of net southbound buying on its
+first eligible day.\footnote{Futu/India Infoline, Hang Seng Tech inclusion and Stock Connect flows
+(2026-06).} With the HKD peg and the global rate cycle, small changes in risk appetite move such a
+long-duration, optionality-laden asset sharply.
+
+\section{Corporate Strategy and SWOT}
+Zhipu's strategy is an open-source flywheel layered over enterprise, sovereign, and overseas expansion.
+\textbf{Strengths}: frontier capability, open-weight mindshare, first-mover capital access. \textbf{Weaknesses}:
+deep losses, near-zero gross margin, compute dependence. \textbf{Opportunities}: agentic/coding workloads,
+sovereign AI demand, international developers, nascent pricing power. \textbf{Threats}: a brutal release
+cadence that commoditises its own product, chip access, and valuation air. These drivers parameterise the
+scenarios next.
+
+\section{Valuation}
+\label{sec:val}
+
+\subsection{Cost of capital}
+We estimate the cost of equity with the CAPM. Lacking a usable local index series, we relever a bottom-up
+beta from global AI-software comparables, giving $\beta \approx 1.6$. With a risk-free rate of 4.0\% and an
+equity risk premium of 6.0\%, $K_e = 4.0\% + 1.6\times 6.0\% = 13.6\%$. Because the firm is effectively
+all-equity, we take WACC~$\approx$~13.5\%.
+
+\subsection{Scenario DCF}
+We project FCFF over 2026--2035 from a US\$200m base, with revenue growth fading from a scenario-specific
+start to a mature rate, operating margin ramping from $-30\%$ to a terminal level, a 15\% tax rate, and
+reinvestment via a sales-to-capital ratio of 1.6--2.0; terminal value uses $g=4\%$. All cells are live in the
+companion workbook (\texttt{model/valuation\_model.xlsx}); results are in Table~\ref{tab:dcf}.
+
+\begin{table}[H]
+\centering
+\caption{Three-scenario DCF (USD unless noted; per-share in HKD).}
+\label{tab:dcf}
+\begin{tabular}{lcccc}
+\toprule
+Scenario & Rev.\ CAGR '26--35 & Term.\ margin & Equity value & Per share (HK\$) \\
+\midrule
+Bear ($p=0.35$) & 21\% & 18\% & US\$1.6B & 29 \\
+Base ($p=0.45$) & 31\% & 28\% & US\$2.5B & 46 \\
+Bull ($p=0.20$) & 43\% & 35\% & US\$4.7B & 84 \\
+\midrule
+\textbf{Probability-weighted} & --- & --- & \textbf{US\$2.6B} & \textbf{47} \\
+\midrule
+\textit{Market (Jun 2026)} & --- & --- & \textit{US\$124B} & \textit{2{,}228} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The probability-weighted intrinsic value is about HK\$47 per share---roughly \textbf{2\% of the market price}.
+No reasonable point estimate of fundamentals approaches the quoted price.
+
+\subsection{Reverse DCF: what the price requires}
+We invert the model to ask what assumptions justify the US\$124bn equity value. Holding WACC at 13.5\% and a
+40\% terminal margin, the price requires initial revenue growth near \textbf{200\% per year} fading to 15\%,
+implying revenue of about \textbf{US\$64bn by 2035} (a 90\% ten-year CAGR, $\approx$318$\times$ FY2026E).
+This is hyperscaler-tier scale---an outcome reserved for a handful of global winners.
+
+\subsection{Relative valuation}
+On FY2026E revenue, Zhipu trades near \textbf{620$\times$ sales}. For context, leading private frontier labs
+(OpenAI, Anthropic) have transacted around 30--40$\times$ trailing revenue, and MiniMax trades far lower than
+Zhipu on the same basis. Zhipu is thus priced roughly an order of magnitude above even the most richly valued
+private peers---consistent with the reverse-DCF reading rather than with comparable multiples.
+
+\subsection{A real-options reading}
+The reconciliation is that Zhipu is best valued not as a discounted cash-flow stream but as a \emph{call
+option on a winner-take-all AGI outcome} \citep{black1973}. The DCF base case is the option's modest intrinsic
+value; the bulk of the market price is time value on a fat right tail---high volatility (192\% annualised) and
+a long horizon both inflate option value. This framing explains why the stock can rationally trade far above
+any DCF point estimate while remaining acutely sensitive to capability news---the subject of
+Section~\ref{sec:event}.
+
+\section{Capability Surprise: An Event Study}
+\label{sec:event}
+\textbf{Hypothesis.} If a pre-revenue lab is priced on its capability trajectory, then capability
+information---model releases and benchmark-leaderboard jumps---should move the price. Under semi-strong market
+efficiency the reaction should be immediate and complete; any systematic \emph{post-capability-announcement
+drift} (PCAD)---the analogue of the post-earnings drift of \citet{ball1968,bernard1989}---would indicate
+inefficiency.
+
+\textbf{Method.} On authoritative daily prices (Tushare \texttt{hk\_daily}), we compute mean-adjusted
+abnormal returns and CARs over three windows: leakage $[-5,-1]$, reaction $[0,+1]$, and drift $[+2,+10]$,
+following the surprise-event design of \citet{guosen2020}. We first detected Zhipu's largest abnormal up-days
+\emph{blind}; they coincide almost one-for-one with GLM releases (Figure~\ref{fig:rets}), validating the
+event dates against price action rather than press dates.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{fig1_price_paths.png}
+\caption{Rebased prices (IPO~$=100$, log scale) with GLM release markers. Same sector, divergent paths:
+Zhipu re-rates on successive SOTA releases while MiniMax de-rates from its peak.}
+\label{fig:price}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{fig2_daily_returns.png}
+\caption{Zhipu daily returns. The largest up-days cluster on capability releases---the market trades a
+``capability calendar.''}
+\label{fig:rets}
+\end{figure}
+
+\textbf{Results.} Averaged across the four GLM events, leakage is $-6.8\%$ (no systematic front-running), the
+reaction window is $+17.5\%$ (the market prices capability, fast), and drift is $+4.3\%$ on average but
+strongly \emph{bimodal} (Table~\ref{tab:car}, Figures~\ref{fig:car}--\ref{fig:scatter}). The drift sign
+depends on the \emph{type} of release: a genuine SOTA leap (GLM-5.2) keeps re-rating ($+32\%$ drift,
+under-reaction), whereas an incremental upgrade (GLM-5.1) reverses ($-23\%$ drift, over-reaction). MiniMax's
+M2.7 produced a muted reaction and the stock subsequently de-rated, confirming that \emph{capability surprise,
+not sector membership, drives the cross-section}.
+
+\begin{table}[H]
+\centering
+\caption{Cumulative abnormal returns around capability events (mean-adjusted, \%).}
+\label{tab:car}
+\begin{tabular}{lcccc}
+\toprule
+Event & Day 0 & Reaction $[0,+1]$ & Drift $[+2,+10]$ & Reading \\
+\midrule
+GLM-5 & 2026-02-11 & $+20.4$ & $+15.4$ & under-reaction \\
+GLM-5-Turbo & 2026-03-16 & $+10.3$ & $-7.7$ & mild reversal \\
+GLM-5.1 & 2026-04-08 & $+11.9$ & $-22.8$ & over-reaction \\
+GLM-5.2 & 2026-06-15 & $+27.4$ & $+32.4$ & strong under-reaction \\
+\midrule
+\textit{MiniMax M2.7} & 2026-03-18 & $+4.5$ & $-3.8$ & muted / de-rate \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{fig3_car_eventtime.png}
+\caption{Average CAR in event time across the four GLM events; the average keeps rising after the event
+(positive drift / PCAD).}
+\label{fig:car}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{fig4_reaction_vs_drift.png}
+\caption{Reaction versus drift. SOTA leaps sit in the under-reaction quadrant; incremental upgrades in the
+over-reaction quadrant.}
+\label{fig:scatter}
+\end{figure}
+
+\subsection{Not every spike is capability: flow events}
+Two of the largest blind-detected up-days do \emph{not} map to a model release: $+43\%$ on 2026-02-20 and
+$+37\%$ on 2026-05-13. Both coincide with \emph{index/flow} catalysts rather than capability---rising
+expectations of Hang Seng Tech Index inclusion and Southbound Stock Connect access (later realised on 5~and
+8~June, with HK\$920m of first-day southbound buying). Separating capability events from flow events matters:
+the CAR results above are driven by the former, while the latter explain part of the raw volatility and warn
+against attributing every move to model quality.
+
+\subsection{Robustness: peer-adjusted abnormal returns}
+Because Zhipu and MiniMax share sector and macro shocks, we re-run the study using \emph{peer-adjusted}
+abnormal returns (benchmark $=$ MiniMax's same-day return), which strips out the common AI-sector component.
+Table~\ref{tab:robust} shows the reaction result is highly robust ($+17.5\%$ vs $+18.5\%$), while the average
+drift \emph{strengthens} ($+4.3\%\!\to\!+20.8\%$): once the falling sector is removed, all four events show
+positive drift. Notably GLM-5.1's apparent ``over-reaction'' flips to continuation ($-22.8\%\!\to\!+12.9\%$),
+revealing that its mean-adjusted reversal was largely a sector move, not firm-specific. The PCAD/under-reaction
+conclusion is thus reinforced, not weakened, by peer adjustment.
+
+\begin{table}[H]
+\centering
+\caption{Robustness: mean-adjusted vs peer-adjusted CAR (\%).}
+\label{tab:robust}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Mean-adjusted} & \multicolumn{2}{c}{Peer-adjusted} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Event & React $[0,1]$ & Drift $[2,10]$ & React $[0,1]$ & Drift $[2,10]$ \\
+\midrule
+GLM-5 & $+20.4$ & $+15.4$ & $+17.2$ & $+13.3$ \\
+GLM-5-Turbo & $+10.3$ & $-7.7$ & $+14.6$ & $+19.2$ \\
+GLM-5.1 & $+11.9$ & $-22.8$ & $+13.4$ & $+12.9$ \\
+GLM-5.2 & $+27.4$ & $+32.4$ & $+28.7$ & $+37.7$ \\
+\midrule
+\textbf{Average} & $+17.5$ & $+4.3$ & $+18.5$ & $+20.8$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Honesty box.} This is diagnostic, not definitive: $n=4$ single-firm events (plus one peer) over five
+months, with drift windows that can overlap a fast release cadence. No statistical significance is claimed.
+Remaining work: a wider, multi-lab event panel and an NLP-scored surprise magnitude.
+
+\section{Conclusion and Implications}
+A disciplined valuation cannot reconcile Zhipu's fundamentals (HK\$29--84 per share) with its market price
+(HK\$2,228). The reverse DCF shows why: the price embeds a US\$64bn-revenue, winner-take-all outcome, best
+expressed as a call option on frontier AI rather than as a cash-flow stream. The event study shows \emph{how}
+that price is discovered---through capability surprises that the market prices immediately and discriminately,
+yet under-reacts to in magnitude (a PCAD that survives peer adjustment), with separate index/flow events
+driving the rest. The verdict is neither ``efficient'' nor ``bubble'' but \textbf{capability momentum priced
+as an option}. For investors, this argues for trading the capability calendar with attention to release
+\emph{type}; for founders, Chapter~18C has turned capability milestones into the primary currency of value;
+for policymakers, compute access is now a direct input to capital formation. Limitations are the small event
+sample and a near-zero gross margin whose future path is highly uncertain; the natural extensions are a
+multi-lab panel and a text-based capability-surprise score.
+
+\appendix
+\clearpage
+\section{Financial Statements Summary}
+\label{sec:statements}
+Figures from the Chapter~18C prospectus and the H1~2025 interim disclosure (RMB; USD at $\approx$7.1).
+
+\begin{table}[H]
+\centering
+\caption{Income-statement summary (RMB millions unless noted).}
+\begin{tabular}{lcccc}
+\toprule
+ & FY2022 & FY2023 & FY2024 & FY2025 \\
+\midrule
+Revenue & --- & $\approx$120 & 312.4 & 724.3 \\
+\quad growth & --- & --- & --- & +132\% \\
+Gross margin & 76.1\% & --- & 3.4\% & $\approx$0\% (H1: $-0.4\%$) \\
+Net loss & --- & --- & 2{,}958.0 & $\approx$4{,}700 \\
+\quad loss growth & --- & --- & --- & +237\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Balance-sheet highlights (RMB millions, at 30~June~2025).}
+\begin{tabular}{lc}
+\toprule
+Item & Amount \\
+\midrule
+Cash and cash equivalents & 190.9 \\
+Net liabilities (negative equity) & $-6{,}150.8$ \\
+Net current liabilities & $-9{,}564.8$ \\
+\midrule
+Shares outstanding (post-IPO, approx.) & $\approx$435m \\
+IPO price / gross proceeds & HK\$116.20 / $\approx$HK\$4.3bn \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The gross-margin collapse from 76\% to near zero is the central operating fact: Zhipu is converting a
+high-margin software model into a compute-subsidised, share-grab model. Combined with negative equity, it is
+why the valuation in Section~\ref{sec:val} must rest on a future-option logic rather than on current
+fundamentals.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,35 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.blg
+*.fls
+*.fdb_latexmk
+*.toc
+*.synctex.gz
+paper/build.log
+paper/b.log
+paper/x*.log
+paper/p*.log
+# keep main.bbl so the bibliography builds even without bibtex
+!paper/main.bbl
+
+# stray / scratch images at repo root (not project figures)
+/edbf3c01f61b417720d1073a8d1d6a52.png
+/*.tmp
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# never commit secrets
+.env
+*token*
