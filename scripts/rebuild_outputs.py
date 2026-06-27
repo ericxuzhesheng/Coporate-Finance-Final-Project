@@ -27,6 +27,15 @@ MARKET_PRICE_HKD = 2046
 REV_2025_USDM = 102
 REV_2026_USDM = 200
 
+# ---- Coordinated high-contrast palette: deep blue / deep red + orange & green accents ----
+C_BLUE = "#1F4E79"    # deep blue   — peer series (MiniMax), main bars, history
+C_RED = "#B22222"     # deep red    — protagonist (Zhipu), market, emphasis
+C_ORANGE = "#E08214"  # deep orange — capability releases
+C_GREEN = "#2E7D32"   # deep green  — index / flow events, secondary category
+C_TEAL = "#2C7FB8"    # blue-teal   — tertiary / earlier history
+C_GRAY = "#9AA0A6"    # neutral gray — non-event bars / muted reference
+C_INK = "#222222"     # near-black  — base/zero lines, averages
+
 
 @dataclass(frozen=True)
 class Scenario:
@@ -274,15 +283,15 @@ def write_sensitivity_chart() -> None:
     for i, (label, low, high, range_label) in enumerate(cases):
         left = min(low, high)
         width = abs(high - low)
-        ax.barh(i, width, left=left, height=0.45, color="#4C78A8")
-        ax.plot([base, base], [i - 0.34, i + 0.34], color="#111111", linewidth=1.2)
+        ax.barh(i, width, left=left, height=0.45, color=C_BLUE)
+        ax.plot([base, base], [i - 0.34, i + 0.34], color=C_INK, linewidth=1.2)
         ax.text(max(low, high) + 1.0, i, f"{range_label}: HK${low:.0f}-{high:.0f}", va="center", fontsize=8)
     ax.set_yticks(y)
     ax.set_yticklabels([case[0] for case in cases])
     ax.invert_yaxis()
     ax.set_xlabel("DCF value per share (HK$)")
     ax.set_title("Base-case DCF sensitivity")
-    ax.axvline(base, color="#111111", linewidth=1, linestyle="--")
+    ax.axvline(base, color=C_INK, linewidth=1, linestyle="--")
     ax.text(base + 0.35, -0.48, f"Base HK${base:.0f}", fontsize=8, va="center")
     ax.grid(axis="x", alpha=0.25)
     ax.spines[["top", "right"]].set_visible(False)
@@ -302,13 +311,13 @@ def write_football_field() -> None:
     fig, ax = plt.subplots(figsize=(8.6, 3.6), dpi=150)
     y = np.arange(len(rows))
     for i, (label, low, high) in enumerate(rows):
-        ax.hlines(i, low, high, color="#4C78A8", linewidth=9)
+        ax.hlines(i, low, high, color=(C_RED if label == "Market" else C_BLUE), linewidth=9)
         ax.text(low, i + 0.18, f"HK${low:.0f}", ha="center", fontsize=8)
         if high != low:
             ax.text(high, i + 0.18, f"HK${high:.0f}", ha="center", fontsize=8)
-    ax.scatter([weighted], [0], marker="D", color="#F58518", zorder=3, label="Prob.-weighted DCF")
+    ax.scatter([weighted], [0], marker="D", color=C_ORANGE, zorder=3, label="Prob.-weighted DCF")
     comp_mid = 35 * REV_2026_USDM / SHARES_M * USD_HKD
-    ax.scatter([comp_mid], [1], marker="D", color="#54A24B", zorder=3, label="Multiple midpoint")
+    ax.scatter([comp_mid], [1], marker="D", color=C_GREEN, zorder=3, label="Multiple midpoint")
     ax.set_xscale("log")
     ax.set_yticks(y)
     ax.set_yticklabels([row[0] for row in rows])
@@ -326,7 +335,7 @@ def write_football_field() -> None:
 def write_comps_chart() -> None:
     names = ["MiniMax", "OpenAI / Anthropic", "Zhipu"]
     values = [35, 35, MARKET_PRICE_HKD * SHARES_M / USD_HKD / REV_2026_USDM]
-    colors = ["#72B7B2", "#54A24B", "#E45756"]
+    colors = [C_BLUE, C_GREEN, C_RED]
     fig, ax = plt.subplots(figsize=(7.8, 4.0), dpi=150)
     ax.bar(names, values, color=colors)
     ax.set_yscale("log")
@@ -350,12 +359,12 @@ def write_financial_profile() -> None:
 
     fig, ax1 = plt.subplots(figsize=(8.2, 4.2), dpi=150)
     rev_mask = ~np.isnan(revenue)
-    ax1.bar(x[rev_mask], revenue[rev_mask], width=0.55, color="#4C78A8", zorder=2,
+    ax1.bar(x[rev_mask], revenue[rev_mask], width=0.55, color=C_BLUE, zorder=2,
             label="Revenue (RMB m)")
     for xi, rv in zip(x[rev_mask], revenue[rev_mask]):
-        ax1.text(xi, rv + 18, f"{rv:.0f}", ha="center", fontsize=8, color="#27496B")
-    ax1.set_ylabel("Revenue (RMB millions)", color="#4C78A8")
-    ax1.tick_params(axis="y", labelcolor="#4C78A8")
+        ax1.text(xi, rv + 18, f"{rv:.0f}", ha="center", fontsize=8, color=C_BLUE)
+    ax1.set_ylabel("Revenue (RMB millions)", color=C_BLUE)
+    ax1.tick_params(axis="y", labelcolor=C_BLUE)
     ax1.set_ylim(0, 840)
     ax1.set_xticks(x)
     ax1.set_xticklabels(labels)
@@ -363,14 +372,14 @@ def write_financial_profile() -> None:
 
     ax2 = ax1.twinx()
     mar_mask = ~np.isnan(margin)
-    ax2.plot(x[mar_mask], margin[mar_mask], "o-", color="#E45756", linewidth=2,
+    ax2.plot(x[mar_mask], margin[mar_mask], "o-", color=C_RED, linewidth=2,
              zorder=3, label="Gross margin (%)")
     for xi, mg in zip(x[mar_mask], margin[mar_mask]):
         note = " (H1)" if xi == 3 else ""
-        ax2.text(xi, mg + 5, f"{mg:.1f}%{note}", ha="center", fontsize=8, color="#A3302F")
-    ax2.axhline(0, color="#999999", linewidth=0.7, linestyle=":")
-    ax2.set_ylabel("Gross margin (%)", color="#E45756")
-    ax2.tick_params(axis="y", labelcolor="#E45756")
+        ax2.text(xi, mg + 5, f"{mg:.1f}%{note}", ha="center", fontsize=8, color=C_RED)
+    ax2.axhline(0, color=C_GRAY, linewidth=0.7, linestyle=":")
+    ax2.set_ylabel("Gross margin (%)", color=C_RED)
+    ax2.tick_params(axis="y", labelcolor=C_RED)
     ax2.set_ylim(-12, 100)
     ax2.spines[["top"]].set_visible(False)
 
@@ -387,18 +396,19 @@ def write_glm_timeline() -> None:
     cadence stays legible alongside the longer 2019--2025 build-up.
     """
     events = [
-        ("2019", "Founded — Tsinghua KEG", "#72B7B2"),
-        ("2022", "GLM family · 76% gross margin", "#72B7B2"),
-        ("2024", "Revenue RMB 312m", "#72B7B2"),
-        ("2025", "Revenue RMB 724m (+132%)", "#72B7B2"),
-        ("Jan 2026", "IPO HK$116.20 · Ch.18C", "#54A24B"),
-        ("Feb 2026", "GLM-5", "#4C78A8"),
-        ("Mar 2026", "GLM-5-Turbo", "#4C78A8"),
-        ("Apr 2026", "GLM-5.1 · #1 SWE-Bench Pro", "#4C78A8"),
-        ("Jun 2026", "GLM-5.2 · MIT weights · 1M ctx", "#F58518"),
+        ("2019", "Founded — Tsinghua KEG", C_TEAL),
+        ("2022", "GLM family · 76% gross margin", C_TEAL),
+        ("2024", "Revenue RMB 312m", C_TEAL),
+        ("2025", "Revenue RMB 724m (+132%)", C_TEAL),
+        ("8 Jan 2026", "IPO HK$116.20 · Ch.18C", C_GREEN),
+        ("11 Feb 2026", "GLM-5", C_ORANGE),
+        ("16 Mar 2026", "GLM-5-Turbo", C_ORANGE),
+        ("8 Apr 2026", "GLM-5.1 · #1 SWE-Bench Pro", C_ORANGE),
+        ("5–8 Jun 2026", "HSTECH index · Stock Connect", C_GREEN),
+        ("15 Jun 2026", "GLM-5.2 · MIT weights · 1M ctx", C_RED),
     ]
     n = len(events)
-    fig, ax = plt.subplots(figsize=(12.0, 3.4), dpi=150)
+    fig, ax = plt.subplots(figsize=(13.0, 3.6), dpi=150)
     ax.axhline(0, color="#444444", linewidth=1.4, zorder=1)
     for i, (date_lbl, name, color) in enumerate(events):
         y = 0.62 if i % 2 == 0 else -0.62
@@ -416,6 +426,113 @@ def write_glm_timeline() -> None:
     ax.spines[["top", "right", "left", "bottom"]].set_visible(False)
     fig.tight_layout()
     fig.savefig(FIGURES / "fig9_glm_timeline.png", bbox_inches="tight")
+    plt.close(fig)
+
+
+# Event taxonomy shared by the price/return figures: capability releases vs index/flow catalysts.
+CAPABILITY_EVENTS = [
+    ("GLM-5", "2026-02-11"),
+    ("GLM-5-Turbo", "2026-03-16"),
+    ("GLM-5.1", "2026-04-08"),
+    ("GLM-5.2", "2026-06-15"),
+]
+FLOW_EVENTS = [
+    ("IPO", "2026-01-08"),
+    ("HSTECH exp.", "2026-02-20"),
+    ("Connect exp.", "2026-05-13"),
+    ("HSTECH in", "2026-06-05"),
+    ("Connect in", "2026-06-08"),
+]
+CAP_COLOR = C_ORANGE   # capability-release markers
+FLOW_COLOR = C_GREEN   # index/flow markers
+ZHIPU_COLOR = C_RED    # protagonist series
+MINIMAX_COLOR = C_BLUE  # peer series
+
+
+def _load_prices(filename: str, ipo_price: float) -> pd.DataFrame:
+    df = pd.read_csv(ROOT / "data" / filename)
+    df["date"] = pd.to_datetime(df["trade_date"].astype(str))
+    df = df.sort_values("date").reset_index(drop=True)
+    df["rebased"] = df["close"] / ipo_price * 100.0
+    return df
+
+
+def write_price_paths() -> None:
+    """Rebased price paths (IPO=100, log) with capability and index/flow event markers."""
+    from matplotlib.lines import Line2D
+
+    zhipu = _load_prices("Zhipu_KnowledgeAtlas_daily.csv", 116.2)
+    mmx = _load_prices("MiniMax_daily.csv", 165.0)
+    fig, ax = plt.subplots(figsize=(9.8, 4.9), dpi=150)
+    ax.plot(zhipu["date"], zhipu["rebased"], color=ZHIPU_COLOR, linewidth=1.7,
+            label="Zhipu / Knowledge Atlas (2513.HK)")
+    ax.plot(mmx["date"], mmx["rebased"], color=MINIMAX_COLOR, linewidth=1.7,
+            label="MiniMax (00100.HK)")
+    ax.set_yscale("log")
+    lo = min(zhipu["rebased"].min(), mmx["rebased"].min())
+    hi = max(zhipu["rebased"].max(), mmx["rebased"].max())
+    ax.set_ylim(lo * 0.7, hi * 1.9)
+    for name, day in CAPABILITY_EVENTS:
+        x = pd.Timestamp(day)
+        ax.axvline(x, color=CAP_COLOR, linestyle="--", linewidth=1.0, alpha=0.9, zorder=1)
+        ax.text(x, hi * 1.95, name, rotation=90, va="top", ha="center", fontsize=6.6,
+                color=CAP_COLOR)
+    for name, day in FLOW_EVENTS:
+        x = pd.Timestamp(day)
+        ax.axvline(x, color=FLOW_COLOR, linestyle=":", linewidth=1.0, alpha=0.85, zorder=1)
+        ax.text(x, lo * 0.74, name, rotation=90, va="bottom", ha="center", fontsize=6.6,
+                color=FLOW_COLOR)
+    ax.set_ylabel("Index (IPO = 100, log scale)")
+    ax.set_title("Rebased price paths: capability releases and index/flow events")
+    ax.grid(axis="y", which="both", alpha=0.2)
+    ax.spines[["top", "right"]].set_visible(False)
+    handles = [
+        Line2D([], [], color=ZHIPU_COLOR, linewidth=1.7, label="Zhipu / Knowledge Atlas (2513.HK)"),
+        Line2D([], [], color=MINIMAX_COLOR, linewidth=1.7, label="MiniMax (00100.HK)"),
+        Line2D([], [], color=CAP_COLOR, linestyle="--", label="Capability release"),
+        Line2D([], [], color=FLOW_COLOR, linestyle=":", label="Index / flow event"),
+    ]
+    ax.legend(handles=handles, loc="lower right", fontsize=7.5, framealpha=0.9)
+    fig.tight_layout()
+    fig.savefig(FIGURES / "fig1_price_paths.png", bbox_inches="tight")
+    plt.close(fig)
+
+
+def write_daily_returns() -> None:
+    """Zhipu daily returns with capability- and flow-event days highlighted and labelled."""
+    zhipu = _load_prices("Zhipu_KnowledgeAtlas_daily.csv", 116.2)
+    cap = {pd.Timestamp(d): n for n, d in CAPABILITY_EVENTS}
+    flow = {pd.Timestamp(d): n for n, d in FLOW_EVENTS}
+    fig, ax = plt.subplots(figsize=(10.6, 4.7), dpi=150)
+    colors = []
+    for d in zhipu["date"]:
+        if d in cap:
+            colors.append(C_ORANGE)
+        elif d in flow:
+            colors.append(C_GREEN)
+        else:
+            colors.append(C_GRAY)
+    ax.bar(zhipu["date"], zhipu["pct_chg"], color=colors, width=1.6, zorder=2)
+    ax.axhline(0, color=C_INK, linewidth=0.8)
+    for d, r in zip(zhipu["date"], zhipu["pct_chg"]):
+        name = cap.get(d) or flow.get(d)
+        if name:
+            ax.text(d, r + (1.6 if r >= 0 else -1.6), name, rotation=90,
+                    ha="center", va="bottom" if r >= 0 else "top", fontsize=6.6,
+                    color=C_ORANGE if d in cap else C_GREEN)
+    ax.set_ylabel("Daily return (%)")
+    ax.set_title("Zhipu daily returns: capability releases vs index/flow events")
+    ax.set_ylim(zhipu["pct_chg"].min() - 10, zhipu["pct_chg"].max() + 12)
+    ax.grid(axis="y", alpha=0.2)
+    ax.spines[["top", "right"]].set_visible(False)
+    from matplotlib.patches import Patch
+    ax.legend(handles=[
+        Patch(color=C_ORANGE, label="Capability release"),
+        Patch(color=C_GREEN, label="Index / flow event"),
+        Patch(color=C_GRAY, label="Other day"),
+    ], loc="lower left", fontsize=7.5, framealpha=0.9)
+    fig.tight_layout()
+    fig.savefig(FIGURES / "fig2_daily_returns.png", bbox_inches="tight")
     plt.close(fig)
 
 
@@ -449,11 +566,12 @@ def write_event_chart() -> None:
     full_days = [day for day in range(-5, 11) if all(day in s.index for s in series.values())]
     avg = pd.concat([s.loc[full_days] for s in series.values()], axis=1).mean(axis=1)
     fig, ax = plt.subplots(figsize=(8.5, 5.0), dpi=150)
-    for name, s in series.items():
-        ax.plot(s.index, s.values, alpha=0.55, linewidth=1.3, label=name)
-    ax.plot(avg.index, avg.values, color="#111111", linewidth=2.5, label="Average (n=4)")
-    ax.axvline(0, color="#555555", linestyle="--", linewidth=1)
-    ax.axhline(0, color="#777777", linewidth=0.8)
+    event_colors = [C_BLUE, C_ORANGE, C_GREEN, C_RED]
+    for (name, s), shade in zip(series.items(), event_colors):
+        ax.plot(s.index, s.values, color=shade, alpha=0.9, linewidth=1.3, label=name)
+    ax.plot(avg.index, avg.values, color=C_INK, linewidth=2.6, label="Average (n=4)")
+    ax.axvline(0, color=C_GRAY, linestyle="--", linewidth=1)
+    ax.axhline(0, color=C_GRAY, linewidth=0.8)
     ax.set_xlim(-5, 10)
     ax.set_xlabel("Event day")
     ax.set_ylabel("CAR (%)")
@@ -467,6 +585,40 @@ def write_event_chart() -> None:
     plt.close(fig)
 
 
+def write_reaction_vs_drift() -> None:
+    """fig4: immediate reaction vs post-event drift (mean-adjusted), matching Table 2."""
+    glm = [
+        ("GLM-5", 22.5, 24.7),
+        ("GLM-5-Turbo", 7.7, -19.3),
+        ("GLM-5.1", 13.8, -14.2),
+        ("GLM-5.2 †", 30.8, 28.2),
+    ]
+    minimax = ("MiniMax M2.7", -5.5, -49.1)
+    fig, ax = plt.subplots(figsize=(7.4, 5.0), dpi=150)
+    ax.axhline(0, color=C_GRAY, linewidth=1)
+    ax.axvline(0, color=C_GRAY, linewidth=1)
+    for name, rx, dy in glm:
+        ax.scatter([rx], [dy], s=62, color=C_RED, zorder=3)
+        ax.annotate(name, (rx, dy), textcoords="offset points", xytext=(8, 4),
+                    fontsize=8.5, color=C_RED)
+    ax.scatter([minimax[1]], [minimax[2]], s=62, facecolor=C_BLUE, edgecolor=C_INK,
+               linewidth=1.0, zorder=3)
+    ax.annotate(minimax[0], (minimax[1], minimax[2]), textcoords="offset points",
+                xytext=(8, 4), fontsize=8.5, color=C_BLUE)
+    ax.text(0.02, 0.97, "UNDER-reaction\n(drift continues)", transform=ax.transAxes,
+            va="top", ha="left", fontsize=8, color=C_GREEN)
+    ax.text(0.02, 0.52, "OVER-reaction\n(reversal)", transform=ax.transAxes,
+            va="top", ha="left", fontsize=8, color=C_RED)
+    ax.set_xlabel("Immediate reaction CAR[0,+1] (%)")
+    ax.set_ylabel("Post-event drift CAR[+2,+10] (%)")
+    ax.set_title("Reaction vs. Drift (mean-adjusted; GLM-5.2 drift provisional †)")
+    ax.grid(alpha=0.2)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(FIGURES / "fig4_reaction_vs_drift.png", bbox_inches="tight")
+    plt.close(fig)
+
+
 def main() -> None:
     write_base_projection_csv()
     write_workbook()
@@ -475,7 +627,10 @@ def main() -> None:
     write_comps_chart()
     write_financial_profile()
     write_glm_timeline()
+    write_price_paths()
+    write_daily_returns()
     write_event_chart()
+    write_reaction_vs_drift()
 
 
 if __name__ == "__main__":
