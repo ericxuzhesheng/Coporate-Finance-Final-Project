@@ -103,6 +103,8 @@ WACC ≈ 13.5%（CAPM，自下而上 β≈1.6，Rf 4%，ERP 6%）；口径统一
 ### 关键图表
 
 <p align="center"><img src="figures/fig1_price_paths.png" width="800" alt="价格路径"></p>
+<p align="center"><img src="figures/fig5_football_field.png" width="720" alt="估值足球场"></p>
+<p align="center"><img src="figures/fig6_ps_comps.png" width="640" alt="市销率对比"></p>
 <p align="center"><img src="figures/fig3_car_eventtime.png" width="640" alt="平均CAR"></p>
 <p align="center"><img src="figures/fig4_reaction_vs_drift.png" width="560" alt="反应vs漂移"></p>
 

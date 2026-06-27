@@ -11,7 +11,7 @@
 \usepackage{anyfontsize}
 \usepackage{xeCJK}
 \setCJKmainfont[BoldFont=SimHei]{SimSun}
-\newCJKfontfamily\heiti{SimHei}
+\newCJKfontfamily\heiti{SimHei}[AutoFakeBold=2.2]
 \usepackage{tikz}
 \usepackage[hidelinks]{hyperref}
 \graphicspath{{../figures/}{./}}
@@ -29,35 +29,29 @@ Foundation-Model Lab: Evidence from Zhipu AI (2513.HK)}
 \begin{tikzpicture}[remember picture,overlay]
   % crest watermark (gray), centred over the title block
   \node at ([yshift=-6.0cm]current page.north) {\includegraphics[width=8.6cm]{crest_watermark.png}};
-  % four corner registration marks
-  \begin{scope}[line width=0.6pt]
-   \draw ([xshift=1cm,yshift=-1.6cm]current page.north west)--([xshift=1cm,yshift=-1cm]current page.north west)--([xshift=1.6cm,yshift=-1cm]current page.north west);
-   \draw ([xshift=-1cm,yshift=-1.6cm]current page.north east)--([xshift=-1cm,yshift=-1cm]current page.north east)--([xshift=-1.6cm,yshift=-1cm]current page.north east);
-   \draw ([xshift=1cm,yshift=1.6cm]current page.south west)--([xshift=1cm,yshift=1cm]current page.south west)--([xshift=1.6cm,yshift=1cm]current page.south west);
-   \draw ([xshift=-1cm,yshift=1.6cm]current page.south east)--([xshift=-1cm,yshift=1cm]current page.south east)--([xshift=-1.6cm,yshift=1cm]current page.south east);
-  \end{scope}
 \end{tikzpicture}
 \centering
 \vspace*{1.2cm}
-{\heiti\fontsize{26}{32}\selectfont 西南财经大学本科考试\par}
+{\heiti\bfseries\fontsize{26}{32}\selectfont 西南财经大学本科考试\par}
 \vspace{1.7cm}
-{\heiti\fontsize{42}{50}\selectfont 课程论文\par}
+{\heiti\bfseries\fontsize{42}{50}\selectfont 课程论文\par}
 \vspace{2.0cm}
 
-\flushleft
-\hspace{1.5cm}\begin{minipage}{15cm}
-\fontsize{15}{22}\selectfont
+\begin{center}
+\begin{minipage}{13.4cm}
+\heiti\bfseries\fontsize{15}{22}\selectfont
 \renewcommand{\arraystretch}{1.35}
-\begin{tabular}{@{}>{\heiti}l @{}l@{}}
-学年学期： & \underline{\makebox[8.2cm][l]{\,2025-2026-2}}\\
-课程名称： & \underline{\makebox[8.2cm][l]{\,公司金融（英）}}\\
-论文题目： & \parbox[t]{8.2cm}{\footnotesize\papertitle}\\[4pt]
-学生学号： & \underline{\makebox[8.2cm][l]{\,42353012}}\\
-学生姓名： & \underline{\makebox[8.2cm][l]{\,许哲圣}}\\
-学\hspace{2em}院： & \underline{\makebox[8.2cm][l]{\,特拉华数据科学学院}}\\
-年级专业： & \underline{\makebox[8.2cm][l]{\,2023 级\quad 金融数学}}\\
+\begin{tabular}{@{}l @{}l@{}}
+学年学期： & \underline{\makebox[8cm][l]{\,2025-2026-2}}\\
+课程名称： & \underline{\makebox[8cm][l]{\,公司金融（英）}}\\
+论文题目： & \parbox[t]{8cm}{\raggedright\footnotesize\papertitle}\\[4pt]
+学生学号： & \underline{\makebox[8cm][l]{\,42353012}}\\
+学生姓名： & \underline{\makebox[8cm][l]{\,许哲圣}}\\
+学\hspace{2em}院： & \underline{\makebox[8cm][l]{\,特拉华数据科学学院}}\\
+年级专业： & \underline{\makebox[8cm][l]{\,2023 级\quad 金融数学}}\\
 \end{tabular}
 \end{minipage}
+\end{center}
 
 \vfill
 \centering
@@ -237,7 +231,17 @@ On FY2026E revenue Zhipu trades near \textbf{570$\times$ sales}. For context, le
 direct comparable---trades far lower than Zhipu on the same basis. We deliberately \emph{exclude} Wenge AI from
 the multiple comparison: its government/enterprise project-delivery model is not comparable to a frontier
 model-API and developer-ecosystem business. Zhipu is thus priced roughly an order of magnitude above even the
-richest private peers---consistent with the reverse-DCF reading rather than with comparable multiples.
+richest private peers---consistent with the reverse-DCF reading rather than with comparable multiples
+(Figure~\ref{fig:comps}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{fig6_ps_comps.png}
+\caption{EV/Sales multiples (log scale). Zhipu's $\approx$570$\times$ is roughly an order of magnitude above
+the 30--40$\times$ at which leading private frontier labs have transacted; even MiniMax sits far below.
+Private-lab multiples are illustrative.}
+\label{fig:comps}
+\end{figure}
 
 \subsection{A real-options reading}
 The reconciliation is that Zhipu is best valued not as a discounted cash-flow stream but as a \emph{call option
@@ -256,6 +260,31 @@ For Zhipu this loop is unusually direct---and unusually fragile, since Feng Liu 
 limitless financing needs and no self-generated cash flow (unlike a Moutai-type internal compounder) depend on
 the loop staying intact. If capability surprises stop arriving, the reflexive support for the option value can
 unwind as fast as it built.
+
+\subsection{Sensitivity and synthesis}
+The conclusion is not an artefact of any single assumption. Figure~\ref{fig:tornado} tornadoes the Base case
+against its main drivers: even jointly bullish settings (WACC~12\%, terminal margin~33\%, 72\% start growth)
+lift value only to the mid-HK\$30s---still about two orders of magnitude below the market. Figure~\ref{fig:ff}
+draws the whole picture together as a valuation football field: scenario DCF (HK\$11--67) and a comparables
+cross-check (HK\$108--143 at 30--40$\times$ sales) both sit far to the left of the HK\$2,046 quote, a gap of
+roughly 60--70$\times$. The market is not pricing a different point on the same distribution; it is pricing a
+different distribution---the right-tail option of Section~\ref{sec:val}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{fig7_sensitivity.png}
+\caption{DCF sensitivity (Base case, per share). Bars span each driver's low/high setting around the
+HK\$29 base; no single input moves value near the market price.}
+\label{fig:tornado}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\textwidth]{fig5_football_field.png}
+\caption{Valuation football field (log scale). Fundamental approaches cluster two orders of magnitude below
+the market price; the diamonds mark the probability-weighted DCF and the comparables midpoint.}
+\label{fig:ff}
+\end{figure}
 
 \section{Capability Surprise: An Event Study}
 \label{sec:event}
