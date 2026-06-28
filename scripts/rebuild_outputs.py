@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import openpyxl
 import pandas as pd
+from math import comb
 from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
 
@@ -139,6 +140,39 @@ def write_base_projection_csv() -> None:
         if col != "year":
             out[col] = out[col].round(1)
     out.to_csv(EVENTSTUDY / "base_projection.csv", index=False)
+
+
+def write_nonparametric_robustness_csv() -> None:
+    """Event-level bootstrap and exact sign-test diagnostics for the CAR robustness table."""
+    df = pd.read_csv(EVENTSTUDY / "car_robustness.csv")
+    rng = np.random.default_rng(2513)
+    windows = [
+        ("Mean-adjusted reaction [0,+1]", "react_mean"),
+        ("Mean-adjusted drift [+2,+10]", "drift_mean"),
+        ("Peer-adjusted reaction [0,+1]", "react_peer"),
+        ("Peer-adjusted drift [+2,+10]", "drift_peer"),
+    ]
+    rows = []
+    for label, col in windows:
+        values = df[col].to_numpy(dtype=float)
+        n = len(values)
+        positives = int((values > 0).sum())
+        sign_p_one_sided = sum(comb(n, k) for k in range(positives, n + 1)) / (2 ** n)
+        bootstrap_means = rng.choice(values, size=(20000, n), replace=True).mean(axis=1)
+        lo, hi = np.percentile(bootstrap_means, [2.5, 97.5])
+        rows.append(
+            {
+                "window": label,
+                "n_events": n,
+                "positive_events": positives,
+                "mean_car_pct": round(float(values.mean()), 1),
+                "median_car_pct": round(float(np.median(values)), 1),
+                "sign_test_p_one_sided": round(float(sign_p_one_sided), 4),
+                "bootstrap_mean_ci_2_5_pct": round(float(lo), 1),
+                "bootstrap_mean_ci_97_5_pct": round(float(hi), 1),
+            }
+        )
+    pd.DataFrame(rows).to_csv(EVENTSTUDY / "nonparametric_robustness.csv", index=False)
 
 
 def write_workbook() -> None:
@@ -621,6 +655,7 @@ def write_reaction_vs_drift() -> None:
 
 def main() -> None:
     write_base_projection_csv()
+    write_nonparametric_robustness_csv()
     write_workbook()
     write_sensitivity_chart()
     write_football_field()
