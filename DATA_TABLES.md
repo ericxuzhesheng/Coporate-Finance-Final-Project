@@ -80,7 +80,7 @@ Balance sheet @ 30-Jun-2025: net liabilities **−RMB 6,150.8M** (negative equit
 
 ## Remaining / refresh items
 1. After **2026-07-03 close**: re-pull prices, rerun `python scripts/rebuild_outputs.py`; GLM-5.2 window completes (drop the † caveat).
-2. MiniMax / Wenge absolute financials for a multi-lab event panel (extension, not required).
+2. Expand `eventstudy/event_catalog.csv` as Wenge/Moonshot/Kimi obtain dated model events and enough listed-price history; the current computable CAR panel is `eventstudy/event_panel.csv` (n=9), with excluded candidates explicitly documented.
 
 ---
 

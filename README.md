@@ -140,6 +140,8 @@ python ../scripts/rebuild_outputs.py
 # 需 TeX Live + XeLaTeX（封面含中文，必须用 xelatex；参考文献为内嵌 APA 列表，无需 bibtex）
 xelatex -interaction=nonstopmode main.tex
 xelatex -interaction=nonstopmode main.tex
+cd ..
+python scripts/validate_outputs.py
 ```
 
 ---
@@ -222,6 +224,8 @@ python ../scripts/rebuild_outputs.py
 # XeLaTeX required (CJK cover); references are an inline APA list, so no bibtex step
 xelatex -interaction=nonstopmode main.tex
 xelatex -interaction=nonstopmode main.tex
+cd ..
+python scripts/validate_outputs.py
 ```
 
 > ⚠️ Reproducing the market data needs your own Tushare token via an environment variable — never commit it.
